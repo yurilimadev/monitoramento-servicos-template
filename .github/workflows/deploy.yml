@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -23,14 +24,18 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
-      - name: Criar .env.production com Segredos
+      - name: Verificar anonimização dos dados demo
+        run: npm run demo:verificar
+
+      - name: Criar .env.production
         run: |
+          echo "VITE_DATA_MODE=${{ secrets.VITE_DATA_MODE }}" >> .env.production
           echo "VITE_SHEETS_API_KEY=${{ secrets.SHEETS_API_KEY }}" >> .env.production
           echo "VITE_SPREADSHEET_ID=${{ secrets.SPREADSHEET_ID }}" >> .env.production
-          echo "VITE_SHEETS_RANGE=transacoes" >> .env.production
+          echo "VITE_SHEETS_RANGE=${{ secrets.SHEETS_RANGE || 'transacoes' }}" >> .env.production
           echo "VITE_REFERENCE_RANGE=${{ secrets.REFERENCE_RANGE || 'referencia_servicos' }}" >> .env.production
           echo "VITE_APPS_SCRIPT_URL=${{ secrets.APPS_SCRIPT_URL }}" >> .env.production
-          echo "VITE_BASE_URL=${{ secrets.VITE_BASE_URL || '/' }}" >> .env.production
+          echo "VITE_BASE_URL=${{ secrets.VITE_BASE_URL || format('/{0}/', github.event.repository.name) }}" >> .env.production
 
       - name: Build do Vue
         run: npm run build

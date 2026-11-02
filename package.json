@@ -3,7 +3,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "setup": "node scripts/setup.js",
+    "demo:gerar": "node scripts/gerar-dados-demo.mjs",
+    "demo:verificar": "node scripts/verificar-anonimizacao.mjs"
   },
   "dependencies": {
     "pinia": "^4.0.3",

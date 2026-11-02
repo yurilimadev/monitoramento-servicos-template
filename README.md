@@ -12,9 +12,45 @@ Aplicação Vue 3 + Google Sheets para **monitorar dados transacionais** de serv
 
 ---
 
+## Rodando sem configurar nada (modo demonstração)
+
+O template já vem com um **dataset fictício** embutido. Não precisa de planilha, Apps Script nem chave de API:
+
+```bash
+npm install
+npm run dev
+```
+
+O app detecta a ausência das credenciais `VITE_SPREADSHEET_ID`/`VITE_APPS_SCRIPT_URL` e entra em **modo demo**:
+
+- catálogo e transações vêm de `src/data/demo/*.json` (24 semanas de snapshots, dados 100% inventados);
+- "Atualizar" grava em `localStorage` do navegador (persiste no refresh, não sai da sua máquina);
+- um banner no topo avisa que é demonstração e oferece **Resetar dados demo**;
+- nenhuma requisição ao Google é feita.
+
+Para usar uma planilha real, basta preencher o `.env` (ou definir `VITE_DATA_MODE=sheets`); o restante do app não muda.
+
+### Dados de demonstração
+
+| Arquivo | Conteúdo |
+|---|---|
+| `src/data/demo/referencia.json` | catálogo fictício (secretarias, agrupamentos, serviços, responsáveis) |
+| `src/data/demo/transacoes.json` | 24 semanas de snapshots fictícios (~528 linhas) |
+| `scripts/gerar-dados-demo.mjs` | regenera as fixtures com seed fixa (saída determinística) |
+| `scripts/verificar-anonimizacao.mjs` | falha se aparecer termo real, e-mail, CPF ou telefone |
+
+```bash
+npm run demo:gerar      # regenera as fixtures
+npm run demo:verificar  # checagem de anonimização (também roda no CI)
+```
+
+> Se for publicar este template, rode `npm run demo:verificar` antes. A lista de termos bloqueados fica em `scripts/verificar-anonimizacao.mjs`.
+
+---
+
 ## Funcionalidades
 
-- **Atualizar Dados** — Formulário dinâmico com accordion para preencher métricas (Aberto, Andamento, Encerrado, Observação) por serviço, com upsert automático na planilha.
+- **Atualizar Dados** — Formulário dinâmico com accordion para preencher métricas (Aberto, Andamento, Encerrado, Observação) por serviço, com upsert automático na planilha (ou em `localStorage` no modo demo).
 - **Visão Geral** — Tabela paginada com ordenação por coluna, filtros por Secretaria, Agrupamento, Serviço (autocomplete) e Período (range de datas). Gráficos de barras e linhas lado a lado para análise de série histórica.
 
 ## Stack
@@ -32,7 +68,9 @@ Aplicação Vue 3 + Google Sheets para **monitorar dados transacionais** de serv
 
 ---
 
-## Passo a passo
+## Passo a passo (usar uma planilha real)
+
+> Só siga esta seção se quiser trocar o modo demo por uma planilha de verdade. Para apenas explorar o app, pule para [Comandos](#comandos).
 
 ### Pré-requisitos
 
@@ -92,6 +130,7 @@ cp .env.example .env
 Preencha o arquivo `.env`:
 
 ```env
+VITE_DATA_MODE=sheets             # opcional; vazio detecta pelas credenciais
 VITE_SHEETS_API_KEY=AIzaSy...     # Chave da Google Sheets API
 VITE_SPREADSHEET_ID=1ABC...       # ID da sua planilha
 VITE_SHEETS_RANGE=transacoes
@@ -117,10 +156,11 @@ No seu repositório no GitHub, vá em **Settings → Secrets and variables → A
 | `SHEETS_API_KEY` | Chave da Google Sheets API v4 |
 | `SPREADSHEET_ID` | ID da planilha |
 | `APPS_SCRIPT_URL` | URL do Web App do Apps Script |
+| `VITE_DATA_MODE` | Opcional: `demo` ou `sheets` (vazio = detecta) |
 
 Faça push na branch `main` e o deploy será automático.
 
-> Dica: configure também `VITE_BASE_URL` como secret se precisar de uma base URL diferente (ex: `/meu-app/` para GitHub Pages com subpasta).
+> Sem secrets configurados, o Pages publica o **modo demo** — útil como vitrine do template. A `base` do Vite é derivada do nome do repositório (`/<repo>/`); sobrescreva com o secret `VITE_BASE_URL` se precisar de outro caminho.
 
 ### 5. Customize
 
@@ -160,15 +200,19 @@ VITE_REFERENCE_RANGE=meu_catalogo
 
 ```
 src/
-  config.js             # Lê import.meta.env.VITE_*
+  config.js             # Lê import.meta.env.VITE_* e resolve o modo (demo | sheets)
   services/
     csvParser.js        # normalizar() helper
+    dataProvider.js     # escolhe o adaptador de dados (demo ou sheets)
+    demoApi.js          # leitura das fixtures + escrita em localStorage
     sheetApi.js         # Leitura via Google Sheets API v4
     sheetWriter.js      # Escrita via Apps Script
+  data/demo/            # fixtures fictícias (referencia.json, transacoes.json)
   stores/
     monitorStore.js     # Pinia (estado global)
   components/
     AppHeader.vue       # Navegação
+    DemoBanner.vue      # Aviso de modo demo + reset
     FilterPanel.vue     # Filtros (Secretaria, Agrupamento, Serviço, Período)
     ServiceCard.vue     # Formulário de serviço
     UpdateForm.vue      # Accordion + formulário de atualização
@@ -178,6 +222,10 @@ src/
   views/
     UpdatePage.vue      # Rota / (atualização)
     OverviewPage.vue    # Rota /visao-geral (visualização)
+scripts/
+  setup.js              # Inicialização interativa (nome, título, modo demo/sheets)
+  gerar-dados-demo.mjs  # Regenera as fixtures fictícias
+  verificar-anonimizacao.mjs  # Barreira contra dados reais
 public/
   .gitkeep              # Pasta para seus assets (favicon, logo, etc.)
 ```
@@ -194,10 +242,12 @@ Arquivos em `public/` são copiados automaticamente para o build.
 ## Comandos
 
 ```bash
-npm run dev      # Servidor de desenvolvimento
+npm run dev      # Servidor de desenvolvimento (modo demo por padrão)
 npm run build    # Produz dist/ para deploy
 npm run preview  # Serve dist/ localmente
-node scripts/setup.js  # Script interativo de inicialização
+npm run setup    # Script interativo de inicialização (nome, título, modo)
+npm run demo:gerar      # Regenera as fixtures fictícias
+npm run demo:verificar  # Checa anonimização das fixtures
 ```
 
 ---

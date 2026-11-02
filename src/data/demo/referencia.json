@@ -1,0 +1,170 @@
+[
+  {
+    "secretaria": "Secretaria de Obras",
+    "nome_agrupamento": "Obras e Infraestrutura",
+    "servico": "Tapa-buraco",
+    "subcategoria": "Manutenção de vias",
+    "responsavel": "Ana Souza"
+  },
+  {
+    "secretaria": "Secretaria de Obras",
+    "nome_agrupamento": "Obras e Infraestrutura",
+    "servico": "Recapeamento asfáltico",
+    "subcategoria": "Manutenção de vias",
+    "responsavel": "Ana Souza"
+  },
+  {
+    "secretaria": "Secretaria de Obras",
+    "nome_agrupamento": "Obras e Infraestrutura",
+    "servico": "Drenagem pluvial",
+    "subcategoria": "Infraestrutura",
+    "responsavel": "Bruno Lima"
+  },
+  {
+    "secretaria": "Secretaria de Obras",
+    "nome_agrupamento": "Iluminação Pública",
+    "servico": "Reparo de luminária",
+    "subcategoria": "Iluminação",
+    "responsavel": "Bruno Lima"
+  },
+  {
+    "secretaria": "Secretaria de Obras",
+    "nome_agrupamento": "Iluminação Pública",
+    "servico": "Instalação de poste",
+    "subcategoria": "Iluminação",
+    "responsavel": "Bruno Lima"
+  },
+  {
+    "secretaria": "Secretaria de Saúde",
+    "nome_agrupamento": "Atenção Básica",
+    "servico": "Consulta médica",
+    "subcategoria": "Atendimento",
+    "responsavel": "Carla Nogueira"
+  },
+  {
+    "secretaria": "Secretaria de Saúde",
+    "nome_agrupamento": "Atenção Básica",
+    "servico": "Vacinação",
+    "subcategoria": "Imunização",
+    "responsavel": "Carla Nogueira"
+  },
+  {
+    "secretaria": "Secretaria de Saúde",
+    "nome_agrupamento": "Atenção Básica",
+    "servico": "Visita domiciliar",
+    "subcategoria": "Atendimento",
+    "responsavel": "Diego Alves"
+  },
+  {
+    "secretaria": "Secretaria de Saúde",
+    "nome_agrupamento": "Atenção Básica",
+    "servico": "Exames laboratoriais",
+    "subcategoria": "Diagnóstico",
+    "responsavel": "Diego Alves"
+  },
+  {
+    "secretaria": "Secretaria de Saúde",
+    "nome_agrupamento": "Vigilância Sanitária",
+    "servico": "Licença sanitária",
+    "subcategoria": "Licenciamento",
+    "responsavel": "Carla Nogueira"
+  },
+  {
+    "secretaria": "Secretaria de Saúde",
+    "nome_agrupamento": "Vigilância Sanitária",
+    "servico": "Inspeção de alimentos",
+    "subcategoria": "Fiscalização",
+    "responsavel": "Diego Alves"
+  },
+  {
+    "secretaria": "Secretaria de Educação",
+    "nome_agrupamento": "Matrícula e Vagas",
+    "servico": "Matrícula escolar",
+    "subcategoria": "Matrícula",
+    "responsavel": "Elisa Prado"
+  },
+  {
+    "secretaria": "Secretaria de Educação",
+    "nome_agrupamento": "Matrícula e Vagas",
+    "servico": "Transferência de aluno",
+    "subcategoria": "Matrícula",
+    "responsavel": "Elisa Prado"
+  },
+  {
+    "secretaria": "Secretaria de Educação",
+    "nome_agrupamento": "Transporte Escolar",
+    "servico": "Cadastro de rota",
+    "subcategoria": "Transporte",
+    "responsavel": "Felipe Maia"
+  },
+  {
+    "secretaria": "Secretaria de Educação",
+    "nome_agrupamento": "Merenda Escolar",
+    "servico": "Entrega de merenda",
+    "subcategoria": "Logística",
+    "responsavel": "Felipe Maia"
+  },
+  {
+    "secretaria": "Secretaria de Meio Ambiente",
+    "nome_agrupamento": "Licenciamento Ambiental",
+    "servico": "Licença ambiental",
+    "subcategoria": "Licenciamento",
+    "responsavel": "Ana Souza"
+  },
+  {
+    "secretaria": "Secretaria de Meio Ambiente",
+    "nome_agrupamento": "Licenciamento Ambiental",
+    "servico": "Poda de árvore",
+    "subcategoria": "Manutenção",
+    "responsavel": "Bruno Lima"
+  },
+  {
+    "secretaria": "Secretaria de Meio Ambiente",
+    "nome_agrupamento": "Fiscalização Ambiental",
+    "servico": "Denúncia ambiental",
+    "subcategoria": "Fiscalização",
+    "responsavel": "Bruno Lima"
+  },
+  {
+    "secretaria": "Secretaria de Mobilidade",
+    "nome_agrupamento": "Transporte Público",
+    "servico": "Bilhete estudantil",
+    "subcategoria": "Benefício",
+    "responsavel": "Elisa Prado"
+  },
+  {
+    "secretaria": "Secretaria de Mobilidade",
+    "nome_agrupamento": "Transporte Público",
+    "servico": "Reclamação de transporte",
+    "subcategoria": "Ouvidoria",
+    "responsavel": "Felipe Maia"
+  },
+  {
+    "secretaria": "Secretaria de Mobilidade",
+    "nome_agrupamento": "Sinalização Viária",
+    "servico": "Sinalização de via",
+    "subcategoria": "Infraestrutura",
+    "responsavel": "Felipe Maia"
+  },
+  {
+    "secretaria": "Ouvidoria Geral",
+    "nome_agrupamento": "Atendimento ao Cidadão",
+    "servico": "Manifestação do cidadão",
+    "subcategoria": "Elogio",
+    "responsavel": "Carla Nogueira"
+  },
+  {
+    "secretaria": "Ouvidoria Geral",
+    "nome_agrupamento": "Atendimento ao Cidadão",
+    "servico": "Manifestação do cidadão",
+    "subcategoria": "Reclamação",
+    "responsavel": "Diego Alves"
+  },
+  {
+    "secretaria": "Ouvidoria Geral",
+    "nome_agrupamento": "Atendimento ao Cidadão",
+    "servico": "Manifestação do cidadão",
+    "subcategoria": "Solicitação",
+    "responsavel": "Elisa Prado"
+  }
+]

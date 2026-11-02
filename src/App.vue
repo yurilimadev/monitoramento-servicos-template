@@ -1,6 +1,7 @@
 <template>
   <div id="app-root">
     <AppHeader />
+    <DemoBanner />
     <main class="container-fluid">
       <section class="container-fluid my-4">
         <router-view />
@@ -14,8 +15,10 @@
 
 <script setup>
 import AppHeader from './components/AppHeader.vue'
+import DemoBanner from './components/DemoBanner.vue'
 import { onMounted } from 'vue'
 import { useMonitorStore } from './stores/monitorStore.js'
+import { isDemo } from './services/dataProvider.js'
 
 const store = useMonitorStore()
 

@@ -92,8 +92,7 @@
 import { ref, onMounted, watch, nextTick } from 'vue'
 import { useMonitorStore } from '../stores/monitorStore.js'
 import ServiceCard from './ServiceCard.vue'
-import { buscarDadosSalvos } from '../services/sheetApi.js'
-import { upsertDados } from '../services/sheetWriter.js'
+import { buscarDadosSalvos, upsertDados } from '../services/dataProvider.js'
 
 export default {
   components: { ServiceCard },

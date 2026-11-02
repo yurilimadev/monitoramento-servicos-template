@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { fetchDadosDaPlanilha, fetchReferenceData } from '../services/sheetApi.js'
+import { fetchDadosDaPlanilha, fetchReferenceData } from '../services/dataProvider.js'
 
 export const useMonitorStore = defineStore('monitor', () => {
   const referenceData = ref([])

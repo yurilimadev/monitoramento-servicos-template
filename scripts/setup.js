@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * setup.js — Script de inicializao do template
+ * setup.js — Script de inicialização do template
  *
  * Uso:
- *   node scripts/setup.js
+ *   npm run setup
  *
- * Pergunta nome, ttulo, autor e substitui placeholders nos arquivos.
- * Cria .env a partir de .env.example, instala dependncias.
+ * Pergunta nome, título, autor, modo de dados e atualiza os placeholders.
+ * Cria o .env conforme o modo escolhido e instala as dependências.
  */
 
 import { createInterface } from 'readline'
@@ -26,12 +26,21 @@ function ask(question) {
 }
 
 async function main() {
-  console.log('\n=== Monitoramento de Servios — Template Setup ===\n')
+  console.log('\n=== Monitoramento de Serviços — Template Setup ===\n')
 
-  const projectName = await ask('Nome do projeto (ex: meu-monitoramento): ') || 'meu-monitoramento'
-  const appTitle = await ask('Ttulo do app (ex: Monitoramento - Meu Setor): ') || 'Monitoramento de Servios'
-  const author = await ask('Autor (para o footer): ') || ''
-  const repoUrl = await ask('URL do repositrio GitHub (opcional): ') || ''
+  const projectName = (await ask('Nome do projeto (ex: meu-monitoramento): ')) || 'meu-monitoramento'
+  const appTitle = (await ask('Título do app (ex: Monitoramento - Meu Setor): ')) || 'Monitoramento de Serviços'
+  const author = await ask('Autor (para o footer): ')
+  const baseUrlInput = await ask('Base URL do deploy (ex: /meu-repo/ — Enter para /): ')
+  const baseUrl = baseUrlInput
+    ? `/${baseUrlInput.replace(/^\/+|\/+$/g, '')}/`
+    : '/'
+
+  console.log('\nModo de dados:')
+  console.log('  1) demo   — dados fictícios locais, roda sem configurar nada (recomendado para começar)')
+  console.log('  2) sheets — planilha Google Sheets real (exige credenciais)')
+  const modoEscolha = (await ask('Escolha [1/2] (padrão 1): ')) || '1'
+  const dataMode = modoEscolha === '2' ? 'sheets' : 'demo'
 
   const filesToUpdate = [
     'index.html',
@@ -43,32 +52,31 @@ async function main() {
   for (const file of filesToUpdate) {
     const filePath = join(root, file)
     if (!existsSync(filePath)) {
-      console.warn(`  [AVISO] ${file} no encontrado — pulando`)
+      console.warn(`  [AVISO] ${file} não encontrado — pulando`)
       continue
     }
     let content = readFileSync(filePath, 'utf-8')
     content = content
+      .replace(/Monitoramento de Serviços — Template/g, appTitle)
       .replace(/Monitoramento - APP Mobby/g, appTitle)
-      .replace(/Monitoramento de Servios — Template/g, appTitle)
-      .replace(/Monitoramento de Servios/g, appTitle)
-      .replace(/Yuri Dimitri - SEMPLA - 2026/g, author)
-      .replace(/Feito com Vue 3 \+ Google Sheets/g, `Feito com Vue 3 + Google Sheets ${author ? '- ' + author : ''}`)
-      .replace(/\/monitoramento-servicos-app-mobby\//g, repoUrl ? repoUrl.replace(/^https?:\/\/[^\/]+/, '') + '/' : '/')
+      .replace(/Monitoramento de Serviços/g, appTitle)
+      .replace(/Feito com Vue 3 \+ Google Sheets — adapte para seus dados/g,
+        `Feito com Vue 3 + Google Sheets${author ? ' - ' + author : ''}`)
     writeFileSync(filePath, content, 'utf-8')
     console.log(`  [OK] ${file} atualizado`)
   }
 
-  // Cria .env a partir do .env.example se ainda no existir
   const envPath = join(root, '.env')
-  if (!existsSync(envPath)) {
-    const envExample = readFileSync(join(root, '.env.example'), 'utf-8')
-    writeFileSync(envPath, envExample, 'utf-8')
-    console.log('  [OK] .env criado a partir de .env.example')
+  if (existsSync(envPath)) {
+    console.log('  [OK] .env já existe — mantido')
   } else {
-    console.log('  [OK] .env j existe — mantido')
+    const env = readFileSync(join(root, '.env.example'), 'utf-8')
+      .replace('VITE_DATA_MODE=', `VITE_DATA_MODE=${dataMode}`)
+      .replace('VITE_BASE_URL=/', `VITE_BASE_URL=${baseUrl}`)
+    writeFileSync(envPath, env, 'utf-8')
+    console.log(`  [OK] .env criado (modo ${dataMode})`)
   }
 
-  // package.json: atualiza name
   const pkgPath = join(root, 'package.json')
   if (existsSync(pkgPath)) {
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'))
@@ -77,8 +85,7 @@ async function main() {
     console.log(`  [OK] package.json name → ${projectName}`)
   }
 
-  // Instalar dependncias
-  console.log('\nInstalando dependncias...')
+  console.log('\nInstalando dependências...')
   try {
     execSync('npm install', { cwd: root, stdio: 'inherit' })
     console.log('  [OK] npm install concluído')
@@ -87,9 +94,14 @@ async function main() {
   }
 
   console.log('\n=== Próximos passos ===')
-  console.log('1. Preencha o arquivo .env com suas credenciais')
-  console.log('2. npm run dev              # Iniciar servidor local')
-  console.log('3. npm run build            # Produzir dist/ para deploy')
+  if (dataMode === 'demo') {
+    console.log('1. npm run dev        # já abre com dados fictícios')
+    console.log('2. Para usar dados reais: preencha o .env e ajuste VITE_DATA_MODE=sheets')
+  } else {
+    console.log('1. Preencha o .env com suas credenciais')
+    console.log('2. npm run dev')
+  }
+  console.log('3. npm run build      # produzir dist/ para deploy')
   console.log('4. Crie os secrets no GitHub e faça push para main\n')
 
   rl.close()
